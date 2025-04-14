@@ -3,9 +3,13 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AuthModule } from './auth/auth.module';
+import { SeedCommand } from './commands/seed.command';
+import { ConsoleCommandsModule } from './console/console.module';
+import { DatabaseModule } from './database/database.module';
+import { SeederService } from './database/seeder.service';
 import { OrdersModule } from './orders/orders.module';
 import { ProductsModule } from './products/products.module';
-import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 
 @Module({
@@ -25,8 +29,10 @@ import { UsersModule } from './users/users.module';
     ProductsModule,
     AuthModule,
     UsersModule,
+    DatabaseModule,
+    ConsoleCommandsModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, SeederService, SeedCommand],
 })
 export class AppModule {}
