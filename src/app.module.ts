@@ -11,6 +11,7 @@ import { SeederService } from './database/seeder.service';
 import { OrdersModule } from './orders/orders.module';
 import { ProductsModule } from './products/products.module';
 import { UsersModule } from './users/users.module';
+import { ReportsModule } from './reports/reports.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { UsersModule } from './users/users.module';
     UsersModule,
     DatabaseModule,
     ConsoleCommandsModule,
+    ReportsModule,
   ],
   controllers: [AppController],
   providers: [AppService, SeederService, SeedCommand],
