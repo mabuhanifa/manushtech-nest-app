@@ -1,26 +1,47 @@
-import { Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { User } from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  constructor(
+    @InjectRepository(User)
+    private usersRepository: Repository<User>,
+  ) {}
+
+  async findOneByEmail(email: string): Promise<User | null> {
+    return this.usersRepository.findOne({ where: { email } });
   }
 
-  findAll() {
-    return `This action returns all users`;
+  async findOneById(id: string): Promise<User | null> {
+    return this.usersRepository.findOne({ where: { id: Number(id) } });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
-  }
+  async createUser(createUserDto: CreateUserDto): Promise<User> {
+    const newUser = this.usersRepository.create(createUserDto);
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+    try {
+      await this.usersRepository.save(newUser);
+      return newUser;
+    } catch (error) {
+      if (
+        error.code === '23505' ||
+        (error.driverError?.code === 'ER_DUP_ENTRY' &&
+          error.message.includes('email'))
+      ) {
+        throw new ConflictException(
+          `Email '${createUserDto.email}' already exists.`,
+        );
+      } else {
+        console.error('Error creating user:', error);
+        throw new InternalServerErrorException('Failed to create user.');
+      }
+    }
   }
 }
