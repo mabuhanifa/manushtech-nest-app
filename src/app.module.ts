@@ -10,8 +10,9 @@ import { DatabaseModule } from './database/database.module';
 import { SeederService } from './database/seeder.service';
 import { OrdersModule } from './orders/orders.module';
 import { ProductsModule } from './products/products.module';
-import { UsersModule } from './users/users.module';
+import { RedisModule } from './redis/redis.module';
 import { ReportsModule } from './reports/reports.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { ReportsModule } from './reports/reports.module';
     DatabaseModule,
     ConsoleCommandsModule,
     ReportsModule,
+    RedisModule,
   ],
   controllers: [AppController],
   providers: [AppService, SeederService, SeedCommand],
