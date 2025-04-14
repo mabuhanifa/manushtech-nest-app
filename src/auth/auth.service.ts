@@ -34,6 +34,7 @@ export class AuthService {
       jti: this.generateJti(),
     };
     const token = this.jwtService.sign(payload, {
+      secret: process.env.JWT_SECRET,
       expiresIn: '1h',
     });
 
