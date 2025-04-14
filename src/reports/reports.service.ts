@@ -17,41 +17,46 @@ export class ReportsService {
   ) {}
 
   async getMonthlySalesReport() {
-    const sixMonthsAgo = new Date();
-    sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
-
-    return this.orderRepository
-      .createQueryBuilder('order')
-      .select("TO_CHAR(order.createdAt, 'YYYY-MM')", 'month')
-      .addSelect('SUM(order.totalAmount)', 'totalSales')
-      .where('order.createdAt >= :sixMonthsAgo', { sixMonthsAgo })
-      .groupBy("TO_CHAR(order.createdAt, 'YYYY-MM')")
-      .orderBy('month', 'ASC')
-      .getRawMany();
+    return this.orderRepository.query(`
+      SELECT 
+        TO_CHAR("order"."createdAt", 'YYYY-MM') AS month,
+        SUM("order"."totalAmount") AS total_sales
+      FROM 
+        "order"
+      WHERE 
+        "order"."createdAt" >= NOW() - INTERVAL '6 months'
+      GROUP BY 
+        TO_CHAR("order"."createdAt", 'YYYY-MM')
+      ORDER BY 
+        month ASC;
+    `);
   }
 
   async getUserOrderReport() {
-    return this.userRepository
-      .createQueryBuilder('user')
-      .select('user.id', 'userId')
-      .addSelect('user.name', 'userName')
-      .addSelect('COUNT(order.id)', 'totalOrders')
-      .addSelect('SUM(order.totalAmount)', 'totalSpending')
-      .leftJoin('user.orders', 'order')
-      .groupBy('user.id')
-      .getRawMany();
+    return this.userRepository.query(`
+      SELECT
+        "user"."id" AS userId,
+        "user"."name" AS userName,
+        COUNT("order"."id") AS totalOrders,
+        SUM("order"."totalAmount") AS totalSpending
+      FROM "user"
+      LEFT JOIN "order" ON "user"."id" = "order"."userId"
+      GROUP BY "user"."id", "user"."name"
+      ORDER BY "user"."id";
+    `);
   }
 
   async getProductSalesReport() {
-    return this.orderItemRepository
-      .createQueryBuilder('orderItem')
-      .select('product.id', 'productId')
-      .addSelect('product.name', 'productName')
-      .addSelect('SUM(orderItem.quantity)', 'totalQuantity')
-      .addSelect('SUM(orderItem.price)', 'totalRevenue')
-      .innerJoin('orderItem.product', 'product')
-      .groupBy('product.id, product.name')
-      .orderBy('"totalQuantity"', 'DESC')
-      .getRawMany();
+    return this.orderItemRepository.query(`
+      SELECT
+        product.id AS "productId",
+        product.name AS "productName",
+        SUM(order_item.quantity) AS "totalQuantity",
+        SUM(order_item.price * order_item.quantity) AS "totalRevenue"
+      FROM order_item
+      INNER JOIN product ON order_item."productId" = product.id
+      GROUP BY product.id, product.name
+      ORDER BY "totalQuantity" DESC;
+    `);
   }
 }
