@@ -17,9 +17,7 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json",
-    "console": "nest console",
-    "seed": "npm run console seed"
+    "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
     "@nestjs/cache-manager": "^3.0.1",
@@ -37,6 +35,8 @@
     "cache-manager-redis-store": "^3.0.1",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
+    "nest-commander": "^3.17.0",
+    "nestjs-command": "^3.1.5",
     "nestjs-console": "^10.0.0",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",

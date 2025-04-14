@@ -13,7 +13,7 @@ import { ReportsService } from './reports.service';
   imports: [
     TypeOrmModule.forFeature([Order, User, OrderItem, Product]),
     JwtModule.register({
-      secret: process.env.JWT_SECRET || 'your_jwt_secret',
+      secret: process.env.JWT_SECRET || 'strong_secret_key',
       signOptions: { expiresIn: '1h' },
     }),
     CacheModule.register(),

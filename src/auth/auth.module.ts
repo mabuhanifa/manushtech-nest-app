@@ -9,7 +9,7 @@ import { AuthService } from './auth.service';
   imports: [
     UsersModule,
     JwtModule.register({
-      secret: process.env.JWT_SECRET || 'secret-key',
+      secret: process.env.JWT_SECRET || 'strong_secret_key',
       signOptions: { expiresIn: '1h' },
     }),
     CacheModule.register(),

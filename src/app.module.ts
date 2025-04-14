@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
+import { CommandsModule } from './commands/commands.module';
 import { SeedCommand } from './commands/seed.command';
 import { ConsoleCommandsModule } from './console/console.module';
 import { DatabaseModule } from './database/database.module';
@@ -35,6 +36,7 @@ import { UsersModule } from './users/users.module';
     ConsoleCommandsModule,
     ReportsModule,
     RedisModule,
+    CommandsModule,
   ],
   controllers: [AppController],
   providers: [AppService, SeederService, SeedCommand],
