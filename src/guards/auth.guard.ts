@@ -25,6 +25,9 @@ export class AuthGuard implements CanActivate {
     }
 
     const token = authHeader.split(' ')[1];
+    if (!token) {
+      throw new UnauthorizedException('Token not found');
+    }
 
     try {
       const payload = this.jwtService.verify(token, {

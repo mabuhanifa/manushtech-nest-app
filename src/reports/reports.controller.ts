@@ -12,11 +12,13 @@ export class ReportsController {
     return this.reportsService.getMonthlySalesReport();
   }
 
+  @UseGuards(AuthGuard)
   @Get('user-orders')
   async getUserOrderReport() {
     return this.reportsService.getUserOrderReport();
   }
 
+  @UseGuards(AuthGuard)
   @Get('product-sales')
   async getProductSalesReport() {
     return this.reportsService.getProductSalesReport();

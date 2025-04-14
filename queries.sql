@@ -1,3 +1,4 @@
+-- This SQL file contains queries for monthly-sales
 SELECT
     TO_CHAR ("order"."createdAt", 'YYYY-MM') AS month,
     SUM("order"."totalAmount") AS total_sales
@@ -10,6 +11,7 @@ GROUP BY
 ORDER BY
     month ASC;
 
+-- this query will return user-orders
 SELECT
     "user"."id" AS userId,
     "user"."name" AS userName,
@@ -24,6 +26,7 @@ GROUP BY
 ORDER BY
     "user"."id";
 
+-- this query will return product-sales
 SELECT
     product.id AS "productId",
     product.name AS "productName",
