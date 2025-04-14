@@ -56,8 +56,8 @@ sudo docker compose up --build
 - **Payload**: **from data provided for seeding**
   ```json
   {
-    "email": "your@email.com",
-    "password": "yourpassword"
+    "email": "user1@example.com",
+    "password": "password1"
   }
   ```
 - **Response**:
